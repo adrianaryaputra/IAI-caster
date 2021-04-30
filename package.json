@@ -1,0 +1,16 @@
+{
+  "name": "iai-caster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "adrianaryaputra",
+  "license": "MIT",
+  "dependencies": {
+    "modbus-mitsubishi-fx3u": "git://github.com/adrianaryaputra/modbus-mitsubishi-fx3u.git",
+    "mqtt": "^4.2.6"
+  }
+}
