@@ -76,7 +76,7 @@ function plc_updateDI(){
         plc.read({
             type: plc.type.M,
             address: 0,
-            length: 16,
+            length: 2,
             priority: 1,
             callback: (e,s) => {
                 if(e) modbus_handleError(e)
