@@ -6,11 +6,12 @@ const mqtt = require('mqtt');
 const mqclient = mqtt.connect(cfg.MQTT_BROKER, {port:cfg.MQTT_PORT, clientId: deviceName});
 
 function mq_publish(command, payload) {
+    console.log(`publishing ${command} : ${payload}`);
     const ps = JSON.stringify({
         payload: payload
     });
-    const topic = ["CASTER", deviceName, command].join('/')
-    mqclient.publish(topic, ps, {qos: 2})
+    const topic = ["CASTER", deviceName, command].join('/');
+    mqclient.publish(topic, ps, {qos: 2});
     console.log(`MQTT send ${topic}: ${ps}`);
 }
 
