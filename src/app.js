@@ -64,7 +64,7 @@ function plc_updateAI(){
                     mq_publish("AI", s);
                     console.log(`read ${s} success`);
                 }
-                this();
+                plc_updateAI();
             }
         })
     }, cfg.PLC_UPDATE_INTERVAL)   
@@ -84,7 +84,7 @@ function plc_updateDI(){
                     mq_publish("DI", s);
                     console.log(`read ${s} success`);
                 }
-                this();
+                plc_updateDI();
             }
         })
     }, cfg.PLC_UPDATE_INTERVAL)   
