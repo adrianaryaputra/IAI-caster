@@ -50,6 +50,30 @@ let thermo2 = new ModbusDevice_T4RN({
     modbusTimeout: cfg.MODBUS_TIMEOUT,
 });
 
+let thermo3 = new ModbusDevice_T4RN({
+    modbusHandler: modbusHandler,
+    modbusId: cfg.THERMO3_ID,
+    modbusTimeout: cfg.MODBUS_TIMEOUT,
+});
+
+let thermo4 = new ModbusDevice_T4RN({
+    modbusHandler: modbusHandler,
+    modbusId: cfg.THERMO4_ID,
+    modbusTimeout: cfg.MODBUS_TIMEOUT,
+});
+
+let thermo5 = new ModbusDevice_T4RN({
+    modbusHandler: modbusHandler,
+    modbusId: cfg.THERMO5_ID,
+    modbusTimeout: cfg.MODBUS_TIMEOUT,
+});
+
+let thermo6 = new ModbusDevice_T4RN({
+    modbusHandler: modbusHandler,
+    modbusId: cfg.THERMO6_ID,
+    modbusTimeout: cfg.MODBUS_TIMEOUT,
+});
+
 async function modbus_run() {
     try {
         modbusRunning = true;
@@ -115,7 +139,7 @@ function modbus_handleError(e){
     if(e.message === 'Port Not Open') setTimeout(modbus_run, 1000);
 }
 
-let thermoList = [thermo1, thermo2];
+let thermoList = [thermo1, thermo2, thermo3, thermo4, thermo5, thermo6];
 let thermoTemp = thermoList.map(() => -1);
 
 function thermo_update() {
@@ -137,7 +161,7 @@ function thermo_update() {
         })
     });
     mq_publish("TEMP", thermoTemp);
-    setTimeout(() => thermo_update(), 5000);
+    setTimeout(() => thermo_update(), cfg.THERMO_UPDATE_INTERVAL);
 }
 
 
