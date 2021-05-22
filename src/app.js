@@ -21,6 +21,11 @@ const {
     SerialPort,
 } = require('modbus-mitsubishi-fx3u');
 
+const {
+    ModbusDevice_T4RN,
+    ModbusDevice_T4RN_address,
+} = require('modbus-autonics-tk4s');
+
 let modbusHandler = new ModbusHandler({
     msgSendInterval: cfg.MODBUS_SEND_INTERVAL,
     timeout: cfg.MODBUS_TIMEOUT,
@@ -30,6 +35,18 @@ let modbusHandler = new ModbusHandler({
 let plc = new ModbusDevice_FX3U({
     modbusHandler: modbusHandler,
     modbusId: cfg.PLC_ID,
+    modbusTimeout: cfg.MODBUS_TIMEOUT,
+});
+
+let thermo1 = new ModbusDevice_T4RN({
+    modbusHandler: modbusHandler,
+    modbusId: cfg.THERMO1_ID,
+    modbusTimeout: cfg.MODBUS_TIMEOUT,
+});
+
+let thermo2 = new ModbusDevice_T4RN({
+    modbusHandler: modbusHandler,
+    modbusId: cfg.THERMO2_ID,
     modbusTimeout: cfg.MODBUS_TIMEOUT,
 });
 
@@ -98,7 +115,35 @@ function modbus_handleError(e){
     if(e.message === 'Port Not Open') setTimeout(modbus_run, 1000);
 }
 
+let thermoList = [thermo1, thermo2];
+let thermoTemp = thermoList.map(() => -1);
+
+function thermo_update() {
+    thermoList.forEach((thermo, id) => {
+        thermo.get({
+            address: thermo.address.presentValue,
+            priority: 1,
+            callback: (e,s) => {
+                if(e) {
+                    console.log(e);
+                    modbus_handleError(e);
+                    thermoTemp[id] = -1;
+                };
+                if(s) {
+                    thermoTemp[id] = s;
+                    console.log("temp :", thermoTemp);
+                };
+            }
+        })
+    });
+    mq_publish("TEMP", thermoTemp);
+    setTimeout(() => thermo_update(), 5000);
+}
+
 
 modbus_run();
+
 plc_updateAI();
 plc_updateDI();
+
+thermo_update();

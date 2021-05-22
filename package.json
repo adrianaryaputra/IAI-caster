@@ -10,6 +10,7 @@
   "author": "adrianaryaputra",
   "license": "MIT",
   "dependencies": {
+    "modbus-autonics-tk4s": "git+https://github.com/adrianaryaputra/modbus-autonics-tk4s.git",
     "modbus-mitsubishi-fx3u": "git://github.com/adrianaryaputra/modbus-mitsubishi-fx3u.git",
     "mqtt": "^4.2.6"
   }
